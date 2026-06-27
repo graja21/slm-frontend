@@ -1,105 +1,149 @@
-<div class="container py-5">
-
-  <div class="d-flex justify-content-between align-items-center mb-4">
+<section class="classification-page">
+  <div class="classification-hero">
     <div>
-      <h2 class="fw-bold mb-1">Text Classification</h2>
-      <p class="text-muted mb-0">Classify financial or business text using your local SLM.</p>
+      <span class="eyebrow">
+        <i class="bi bi-diagram-3"></i>
+        AI Classification
+      </span>
+
+      <h1>Classify text with local AI</h1>
+
+      <p>
+        Analyze financial, business or general text and automatically detect its category
+        using your local SLM backend.
+      </p>
     </div>
 
-    <a routerLink="/dashboard" class="btn btn-outline-secondary">
-      Back to Dashboard
-    </a>
+    <div class="hero-badge">
+      <i class="bi bi-cpu-fill"></i>
+      <strong>{{ model | titlecase }} AI</strong>
+      <small>Local SLM</small>
+    </div>
   </div>
 
-  <div class="row g-4">
-
-    <div class="col-lg-7">
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-
-          <h5 class="fw-bold mb-3">Input</h5>
-
-          <div class="mb-3">
-            <label class="form-label">Text to classify</label>
-            <textarea
-              rows="8"
-              class="form-control"
-              [(ngModel)]="text"
-              placeholder="Paste your text here...">
-            </textarea>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Model</label>
-            <input
-              class="form-control"
-              [(ngModel)]="model"
-              placeholder="mistral">
-          </div>
-
-          <button
-            class="btn btn-primary w-100"
-            (click)="classify()"
-            [disabled]="loading">
-
-            <span *ngIf="!loading">Analyze Text</span>
-            <span *ngIf="loading">Analyzing...</span>
-
-          </button>
-
-          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-            {{ errorMessage }}
-          </div>
-
+  <div class="workspace-grid">
+    <div class="editor-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Text to classify</h2>
         </div>
+
+        <button class="clear-btn" type="button" (click)="clear()" [disabled]="loading">
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="text"
+        placeholder="Paste your text here..."
+        [disabled]="loading"
+      ></textarea>
+
+      <div class="model-box">
+        <label>
+          <i class="bi bi-cpu"></i>
+          Model
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="model"
+          placeholder="mistral"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="editor-footer">
+        <span>
+          <i class="bi bi-fonts"></i>
+          {{ text.length }} characters
+        </span>
+
+        <span>
+          <i class="bi bi-card-text"></i>
+          {{ text.trim() ? text.trim().split(' ').length : 0 }} words
+        </span>
+      </div>
+
+      <button class="main-btn" type="button" (click)="classify()" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Analyze Text
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Analyzing...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
       </div>
     </div>
 
-    <div class="col-lg-5">
-      <div class="card shadow-sm border-0 h-100">
-        <div class="card-body p-4">
+    <div class="result-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>Classification Result</h2>
+        </div>
 
-          <h5 class="fw-bold mb-3">Result</h5>
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
 
-          <div *ngIf="!result" class="text-muted">
-            No result yet. Submit a text to see the classification.
-          </div>
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-magic"></i>
+        </div>
 
-          <div *ngIf="result">
+        <h3>No result yet</h3>
 
-            <div class="mb-3">
-              <span class="badge bg-success fs-6">
-                {{ result.result?.category || 'Unknown' }}
-              </span>
-            </div>
+        <p>
+          Enter text on the left and click Analyze Text. The predicted category will appear here.
+        </p>
+      </div>
 
-            <div class="mb-2">
-              <strong>Model:</strong>
-              <span class="text-muted">{{ result.model }}</span>
-            </div>
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+      </div>
 
-            <div class="mb-2">
-              <strong>Analysis Type:</strong>
-              <span class="text-muted">{{ result.analysisType }}</span>
-            </div>
+      <div *ngIf="result && !loading" class="classification-output">
+        <div class="category-card">
+          <span>Detected Category</span>
+          <strong>{{ getCategory() }}</strong>
+        </div>
 
-            <div class="mb-2">
-              <strong>Date:</strong>
-              <span class="text-muted">{{ result.createdAt }}</span>
-            </div>
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-diagram-3"></i>
+            {{ result.analysisType }}
+          </span>
 
-            <hr>
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
 
-            <h6 class="fw-bold">Analyzed Text</h6>
-            <p class="text-muted small">
-              {{ result.inputText }}
-            </p>
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
 
-          </div>
-
+        <div class="analyzed-text">
+          <h4>Analyzed Text</h4>
+          <p>{{ result.inputText }}</p>
         </div>
       </div>
     </div>
-
   </div>
-</div>
+</section>

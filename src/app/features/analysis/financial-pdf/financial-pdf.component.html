@@ -1,0 +1,190 @@
+<section class="financial-page">
+  <div class="financial-hero">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-filetype-pdf"></i>
+        Financial PDF Analysis
+      </span>
+
+      <h1>Analyze financial reports from PDF</h1>
+
+      <p>
+        Upload a bank or company financial report and extract structured financial
+        indicators using your local SLM backend.
+      </p>
+    </div>
+
+    <div class="hero-badge">
+      <i class="bi bi-file-earmark-bar-graph-fill"></i>
+      <strong>PDF AI</strong>
+      <small>Chunked Analysis</small>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <div class="upload-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Upload financial PDF</h2>
+        </div>
+
+        <button class="clear-btn" type="button" (click)="clear()" [disabled]="loading">
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <label
+        class="drop-zone"
+        [class.dragging]="isDragging"
+        [class.has-file]="selectedFile"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <input
+          type="file"
+          accept="application/pdf"
+          hidden
+          (change)="onFileSelected($event)"
+          [disabled]="loading"
+        />
+
+        <div class="drop-icon">
+          <i class="bi" [ngClass]="selectedFile ? 'bi-file-earmark-pdf-fill' : 'bi-cloud-arrow-up'"></i>
+        </div>
+
+        <ng-container *ngIf="!selectedFile">
+          <h3>Drop your PDF here</h3>
+          <p>or click to browse from your computer</p>
+          <span class="file-hint">Only PDF files are supported</span>
+        </ng-container>
+
+        <ng-container *ngIf="selectedFile">
+          <h3>{{ selectedFile.name }}</h3>
+          <p>{{ getFileSize() }}</p>
+          <span class="file-hint">Ready for analysis</span>
+        </ng-container>
+      </label>
+
+      <button class="main-btn" type="button" (click)="analyzePdf()" [disabled]="loading || !selectedFile">
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Analyze PDF
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Analyzing PDF...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+
+      <div class="info-box">
+        <i class="bi bi-shield-check"></i>
+        <div>
+          <strong>Secure workflow</strong>
+          <p>Angular sends the PDF to Spring Boot only. Spring Boot forwards it to FastAPI.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>Financial Indicators</h2>
+        </div>
+
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-graph-up-arrow"></i>
+        </div>
+
+        <h3>No PDF analyzed yet</h3>
+
+        <p>
+          Upload a financial report and click Analyze PDF. Extracted indicators will appear here.
+        </p>
+      </div>
+
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+        <div class="line medium"></div>
+      </div>
+
+      <div *ngIf="result && !loading" class="financial-output">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span>Company</span>
+            <strong>{{ getValue('company_name') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Total Assets</span>
+            <strong>{{ getValue('total_assets') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Net Assets</span>
+            <strong>{{ getValue('net_assets') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Net Profit</span>
+            <strong>{{ getValue('net_profit') }}</strong>
+          </div>
+
+          <div class="metric-card">
+  <span>Invalid Chunks</span>
+  <strong>{{ getInvalidChunks() }}</strong>
+</div>
+
+          <div class="metric-card">
+            <span>Analysis Type</span>
+            <strong>{{ result.analysisType }}</strong>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-filetype-pdf"></i>
+            {{ result.filename || selectedFile?.name }}
+          </span>
+
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
+
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
+
+        <details class="raw-details">
+          <summary>
+            <i class="bi bi-code-square"></i>
+            View raw result
+          </summary>
+
+          <pre>{{ getRawResult() }}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>

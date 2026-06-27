@@ -8,6 +8,7 @@ import { HistoryComponent } from './features/history/history.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { authGuard } from './core/guards/auth.guard';
 import { SummarizationComponent } from './features/analysis/summarization/summarization.component';
+import { FinancialPdfComponent } from './features/analysis/financial-pdf/financial-pdf.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,7 +24,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'classification', component: ClassificationComponent },
       { path: 'history', component: HistoryComponent },
-      { path: 'analysis/summarization', component: SummarizationComponent }
+      { path: 'analysis/summarization', component: SummarizationComponent },
+      { path: 'analysis/financial-pdf', component: FinancialPdfComponent }
     ]
   },
 
