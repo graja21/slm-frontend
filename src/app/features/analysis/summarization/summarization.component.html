@@ -1,0 +1,127 @@
+<section class="summarization-page">
+  <div class="summary-hero">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-text-paragraph"></i>
+        AI Summarization
+      </span>
+
+      <h1>Turn long text into clear insights</h1>
+
+      <p>
+        Paste any long document, report, article or paragraph and generate a clean
+        AI-powered summary using your local SLM backend.
+      </p>
+    </div>
+
+    <div class="hero-badge">
+  <i class="bi bi-cpu-fill"></i>
+  <strong>Mistral AI</strong>
+  <small>Local SLM</small>
+</div>
+  </div>
+
+  <div class="workspace-grid">
+    <div class="editor-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Text to summarize</h2>
+        </div>
+
+        <button class="clear-btn" type="button" (click)="clear()" [disabled]="loading">
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="text"
+        placeholder="Paste your text here..."
+        [disabled]="loading"
+      ></textarea>
+
+      <div class="editor-footer">
+        <span>
+          <i class="bi bi-fonts"></i>
+          {{ text.length }} characters
+        </span>
+
+        <span>
+          <i class="bi bi-card-text"></i>
+          {{ text.trim() ? text.trim().split(' ').length : 0 }} words
+        </span>
+      </div>
+
+      <button class="main-btn" type="button" (click)="summarize()" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Generate Summary
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Summarizing...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>AI Summary</h2>
+        </div>
+
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-magic"></i>
+        </div>
+
+        <h3>No summary yet</h3>
+
+        <p>
+          Enter text on the left and click Generate Summary. The result will appear here.
+        </p>
+      </div>
+
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+      </div>
+
+      <div *ngIf="result && !loading" class="summary-output">
+        <p>{{ getSummary() }}</p>
+
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-diagram-3"></i>
+            {{ result.analysisType }}
+          </span>
+
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
+
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

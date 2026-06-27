@@ -7,6 +7,7 @@ import { ClassificationComponent } from './features/analysis/classification/clas
 import { HistoryComponent } from './features/history/history.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { authGuard } from './core/guards/auth.guard';
+import { SummarizationComponent } from './features/analysis/summarization/summarization.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,7 +22,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'classification', component: ClassificationComponent },
-      { path: 'history', component: HistoryComponent }
+      { path: 'history', component: HistoryComponent },
+      { path: 'analysis/summarization', component: SummarizationComponent }
     ]
   },
 
