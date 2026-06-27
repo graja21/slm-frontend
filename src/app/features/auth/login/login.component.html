@@ -1,45 +1,163 @@
-<div class="container d-flex align-items-center justify-content-center min-vh-100">
-  <div class="card shadow p-4 border-0" style="width: 420px;">
-    <h2 class="text-center mb-3 fw-bold">SLM AI Login</h2>
-    <p class="text-center text-muted mb-4">Connect to your AI dashboard</p>
+<div class="login-page">
 
-    <div *ngIf="errorMessage" class="alert alert-danger">
-      {{ errorMessage }}
+  <section class="login-card-wrapper">
+    <div class="login-card">
+
+      <div class="chip-icon">
+        <i class="bi bi-cpu"></i>
+      </div>
+
+      <h1>
+        <span>SLM</span> AI PLATFORM
+      </h1>
+
+      <div class="title-line"></div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <form (ngSubmit)="login()">
+
+        <div class="form-group">
+          <label>Email address</label>
+          <div class="input-box">
+            <i class="bi bi-envelope"></i>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              placeholder="amine@test.com"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-box">
+            <i class="bi bi-lock"></i>
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+              required
+            >
+          </div>
+        </div>
+
+        <button class="login-btn" type="submit" [disabled]="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
+
+      </form>
+
+      <p class="register-text">
+        Don’t have an account?
+        <a routerLink="/register">Create one</a>
+      </p>
+
+    </div>
+  </section>
+
+  <section class="illustration-wrapper">
+
+    <div class="binary-bg">
+      010101001101011010101001001101010101101010010101
+      101001011010101001101011010101001001101010101101
     </div>
 
-    <form (ngSubmit)="login()">
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="email"
-          placeholder="amine@test.com"
-          required
-        >
-      </div>
+    <svg class="ai-illustration" viewBox="0 0 760 720" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="password"
-          placeholder="Password"
-          required
-        >
-      </div>
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
 
-      <button class="btn btn-primary w-100" type="submit" [disabled]="loading">
-        {{ loading ? 'Logging in...' : 'Login' }}
-      </button>
-    </form>
+        <radialGradient id="brainGlow" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+          <stop offset="45%" stop-color="#2563eb" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-    <p class="text-center mt-3 mb-0">
-      No account?
-      <a routerLink="/register">Create one</a>
-    </p>
-  </div>
+      <circle cx="380" cy="330" r="260" fill="url(#brainGlow)" opacity="0.55"/>
+
+      <!-- Head outline -->
+      <path
+        class="head-line"
+        d="M525 438C572 429 613 402 627 356C640 312 618 268 580 242C550 221 516 210 487 188C454 164 424 137 378 128C290 111 203 163 174 250C144 341 190 441 282 469C320 480 355 478 392 489C429 500 455 528 492 532C525 536 551 518 565 490"
+      />
+
+      <!-- Face profile -->
+      <path
+        class="head-line thin"
+        d="M510 168C555 178 589 214 605 257C621 299 614 344 588 378C572 399 557 412 554 435C551 461 569 482 565 508"
+      />
+
+      <!-- Brain network -->
+      <g filter="url(#glow)">
+        <line x1="205" y1="255" x2="285" y2="210" class="network-line"/>
+        <line x1="285" y1="210" x2="360" y2="235" class="network-line"/>
+        <line x1="360" y1="235" x2="440" y2="190" class="network-line"/>
+        <line x1="440" y1="190" x2="510" y2="245" class="network-line"/>
+
+        <line x1="205" y1="255" x2="245" y2="345" class="network-line"/>
+        <line x1="245" y1="345" x2="340" y2="325" class="network-line"/>
+        <line x1="340" y1="325" x2="410" y2="385" class="network-line"/>
+        <line x1="410" y1="385" x2="505" y2="335" class="network-line"/>
+
+        <line x1="285" y1="210" x2="340" y2="325" class="network-line"/>
+        <line x1="360" y1="235" x2="410" y2="385" class="network-line"/>
+        <line x1="440" y1="190" x2="505" y2="335" class="network-line"/>
+        <line x1="245" y1="345" x2="300" y2="430" class="network-line"/>
+        <line x1="300" y1="430" x2="410" y2="385" class="network-line"/>
+
+        <circle cx="205" cy="255" r="7" class="node"/>
+        <circle cx="285" cy="210" r="7" class="node"/>
+        <circle cx="360" cy="235" r="7" class="node"/>
+        <circle cx="440" cy="190" r="7" class="node"/>
+        <circle cx="510" cy="245" r="7" class="node"/>
+        <circle cx="245" cy="345" r="7" class="node"/>
+        <circle cx="340" cy="325" r="7" class="node"/>
+        <circle cx="410" cy="385" r="7" class="node"/>
+        <circle cx="505" cy="335" r="7" class="node"/>
+        <circle cx="300" cy="430" r="7" class="node"/>
+        <circle cx="390" cy="300" r="9" class="node hot"/>
+      </g>
+
+      <!-- Circuit lines -->
+      <g class="circuits">
+        <path d="M250 470V580H200V630"/>
+        <path d="M320 475V600H290"/>
+        <path d="M390 490V610H430"/>
+        <path d="M465 465V590H530V650"/>
+        <path d="M210 400H120V455H70"/>
+        <path d="M525 410H635V500"/>
+      </g>
+
+      <g filter="url(#glow)">
+        <circle cx="70" cy="455" r="4" class="circuit-node"/>
+        <circle cx="200" cy="630" r="4" class="circuit-node"/>
+        <circle cx="290" cy="600" r="4" class="circuit-node"/>
+        <circle cx="430" cy="610" r="4" class="circuit-node"/>
+        <circle cx="530" cy="650" r="4" class="circuit-node"/>
+        <circle cx="635" cy="500" r="4" class="circuit-node"/>
+      </g>
+
+      <!-- Decorative particles -->
+      <circle cx="120" cy="160" r="6" class="particle"/>
+      <circle cx="620" cy="150" r="5" class="particle purple"/>
+      <circle cx="675" cy="280" r="7" class="particle"/>
+      <circle cx="145" cy="540" r="5" class="particle purple"/>
+      <circle cx="560" cy="620" r="6" class="particle"/>
+    </svg>
+
+  </section>
+
 </div>

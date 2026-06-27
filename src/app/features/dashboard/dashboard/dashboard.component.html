@@ -1,1 +1,98 @@
-<p>dashboard works!</p>
+<section class="dashboard-page">
+  <div class="hero-card">
+    <div class="hero-content">
+      <span class="eyebrow">
+        <i class="bi bi-stars"></i>
+        SLM AI Platform
+      </span>
+
+      <h1>Welcome back to your AI workspace</h1>
+
+      <p>
+        Analyze documents, classify text, summarize content, extract financial data,
+        and interact with PDFs using local Small Language Models.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/classification" class="btn-primary-ai">
+          Start Classification
+          <i class="bi bi-arrow-right"></i>
+        </a>
+
+        <a routerLink="/history" class="btn-secondary-ai">
+          View History
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="ai-orb">
+        <i class="bi bi-cpu"></i>
+      </div>
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <div class="pulse-dot dot-one"></div>
+      <div class="pulse-dot dot-two"></div>
+      <div class="pulse-dot dot-three"></div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <div class="stat-icon">
+        <i [class]="stat.icon"></i>
+      </div>
+      <div>
+        <h3>{{ stat.value }}</h3>
+        <p>{{ stat.label }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div>
+      <span class="eyebrow">AI Tools</span>
+      <h2>Available Modules</h2>
+    </div>
+    <p>Choose an AI module to start your analysis.</p>
+  </div>
+
+  <div class="modules-grid">
+    <a
+      class="module-card"
+      *ngFor="let module of modules"
+      [routerLink]="module.route"
+    >
+      <div class="module-top">
+        <div class="module-icon">
+          <i [class]="module.icon"></i>
+        </div>
+        <span class="module-badge">{{ module.badge }}</span>
+      </div>
+
+      <h3>{{ module.title }}</h3>
+      <p>{{ module.description }}</p>
+
+      <div class="module-link">
+        Open module
+        <i class="bi bi-arrow-up-right"></i>
+      </div>
+    </a>
+  </div>
+
+  <div class="recent-card">
+    <div>
+      <span class="eyebrow">Recent Activity</span>
+      <h2>No recent analyses yet</h2>
+      <p>
+        Your latest classifications, summaries, PDF analyses and RAG results will
+        appear here once you start using the platform.
+      </p>
+    </div>
+
+    <a routerLink="/classification" class="btn-primary-ai">
+      Create First Analysis
+      <i class="bi bi-plus-lg"></i>
+    </a>
+  </div>
+</section>
