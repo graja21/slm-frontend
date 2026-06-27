@@ -1,29 +1,105 @@
-<div class="container mt-5">
-  <h2>Text Classification</h2>
+<div class="container py-5">
 
-  <div class="mb-3">
-    <label class="form-label">Text</label>
-    <textarea
-      rows="6"
-      class="form-control"
-      [(ngModel)]="text"
-      placeholder="Enter text to classify">
-    </textarea>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Text Classification</h2>
+      <p class="text-muted mb-0">Classify financial or business text using your local SLM.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="btn btn-outline-secondary">
+      Back to Dashboard
+    </a>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">Model</label>
-    <input
-      class="form-control"
-      [(ngModel)]="model"
-      placeholder="mistral">
+  <div class="row g-4">
+
+    <div class="col-lg-7">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          <h5 class="fw-bold mb-3">Input</h5>
+
+          <div class="mb-3">
+            <label class="form-label">Text to classify</label>
+            <textarea
+              rows="8"
+              class="form-control"
+              [(ngModel)]="text"
+              placeholder="Paste your text here...">
+            </textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Model</label>
+            <input
+              class="form-control"
+              [(ngModel)]="model"
+              placeholder="mistral">
+          </div>
+
+          <button
+            class="btn btn-primary w-100"
+            (click)="classify()"
+            [disabled]="loading">
+
+            <span *ngIf="!loading">Analyze Text</span>
+            <span *ngIf="loading">Analyzing...</span>
+
+          </button>
+
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+
+          <h5 class="fw-bold mb-3">Result</h5>
+
+          <div *ngIf="!result" class="text-muted">
+            No result yet. Submit a text to see the classification.
+          </div>
+
+          <div *ngIf="result">
+
+            <div class="mb-3">
+              <span class="badge bg-success fs-6">
+                {{ result.result?.category || 'Unknown' }}
+              </span>
+            </div>
+
+            <div class="mb-2">
+              <strong>Model:</strong>
+              <span class="text-muted">{{ result.model }}</span>
+            </div>
+
+            <div class="mb-2">
+              <strong>Analysis Type:</strong>
+              <span class="text-muted">{{ result.analysisType }}</span>
+            </div>
+
+            <div class="mb-2">
+              <strong>Date:</strong>
+              <span class="text-muted">{{ result.createdAt }}</span>
+            </div>
+
+            <hr>
+
+            <h6 class="fw-bold">Analyzed Text</h6>
+            <p class="text-muted small">
+              {{ result.inputText }}
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <button class="btn btn-primary" (click)="classify()">
-    Analyze
-  </button>
-
-  <hr>
-
-  <pre *ngIf="result">{{ result | json }}</pre>
 </div>

@@ -1,0 +1,32 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <h4 class="logo">SLM AI</h4>
+
+    <nav>
+      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/classification">Classification</a>
+      <a routerLink="/history">History</a>
+      <a routerLink="/profile">Profile</a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div>
+        <strong>AI Analysis Platform</strong>
+      </div>
+
+      <button class="btn btn-outline-danger btn-sm" (click)="logout()">
+        Logout
+      </button>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="footer">
+      SLM AI Platform © 2026
+    </footer>
+  </div>
+</div>
