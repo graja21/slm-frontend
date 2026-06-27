@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <h2>Text Classification</h2>
+
+  <div class="mb-3">
+    <label class="form-label">Text</label>
+    <textarea
+      rows="6"
+      class="form-control"
+      [(ngModel)]="text"
+      placeholder="Enter text to classify">
+    </textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Model</label>
+    <input
+      class="form-control"
+      [(ngModel)]="model"
+      placeholder="mistral">
+  </div>
+
+  <button class="btn btn-primary" (click)="classify()">
+    Analyze
+  </button>
+
+  <hr>
+
+  <pre *ngIf="result">{{ result | json }}</pre>
+</div>

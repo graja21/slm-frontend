@@ -1,20 +1,40 @@
 <div class="container d-flex align-items-center justify-content-center min-vh-100">
-  <div class="card shadow p-4" style="width: 420px;">
-    <h2 class="text-center mb-3">SLM AI Login</h2>
+  <div class="card shadow p-4 border-0" style="width: 420px;">
+    <h2 class="text-center mb-3 fw-bold">SLM AI Login</h2>
     <p class="text-center text-muted mb-4">Connect to your AI dashboard</p>
 
-    <form>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="login()">
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input type="email" class="form-control" placeholder="amine@test.com">
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="amine@test.com"
+          required
+        >
       </div>
 
       <div class="mb-3">
         <label class="form-label">Password</label>
-        <input type="password" class="form-control" placeholder="Password">
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Password"
+          required
+        >
       </div>
 
-      <button class="btn btn-primary w-100" type="button">Login</button>
+      <button class="btn btn-primary w-100" type="submit" [disabled]="loading">
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
     </form>
 
     <p class="text-center mt-3 mb-0">
