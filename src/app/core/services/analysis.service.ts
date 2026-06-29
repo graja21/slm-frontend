@@ -178,4 +178,14 @@ export class AnalysisService {
     );
   }
 
+  // ===========================
+// RAG Status
+// ===========================
+
+ragStatus(): Observable<any> {
+  return this.http.get<any>(
+    `${this.apiUrl}/rag-status`
+  );
+}
+
 }

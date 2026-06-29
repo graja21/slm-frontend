@@ -1,0 +1,172 @@
+<section class="rag-page">
+  <div class="rag-hero">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-chat-dots"></i>
+        Ask Document
+      </span>
+
+      <h1>Ask questions about your indexed document</h1>
+
+      <p>
+        Use Retrieval-Augmented Generation to ask natural-language questions about
+        a document already indexed in your local AI backend.
+      </p>
+    </div>
+
+    <div class="hero-badge">
+      <i class="bi bi-database-check"></i>
+      <strong>RAG AI</strong>
+      <small>{{ getStatusLabel() }}</small>
+    </div>
+  </div>
+
+  <div class="status-card">
+    <div class="status-left">
+      <div class="status-icon" [ngClass]="getStatusClass()">
+        <i class="bi bi-database"></i>
+      </div>
+
+      <div>
+        <span class="eyebrow">RAG Status</span>
+        <h2>{{ getStatusLabel() }}</h2>
+        <p>{{ getSourceName() }}</p>
+      </div>
+    </div>
+
+    <div class="status-meta">
+      <span>
+        <i class="bi bi-boxes"></i>
+        {{ getChunksCount() }} chunks
+      </span>
+
+      <button class="refresh-btn" type="button" (click)="checkRagStatus()" [disabled]="loadingStatus">
+        <i class="bi bi-arrow-clockwise"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <div class="question-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Your question</h2>
+        </div>
+
+        <button class="clear-btn" type="button" (click)="clear()" [disabled]="loading">
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="question"
+        placeholder="Ask a question about the indexed document..."
+        [disabled]="loading"
+      ></textarea>
+
+      <div class="model-box">
+        <label>
+          <i class="bi bi-cpu"></i>
+          Model
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="model"
+          placeholder="mistral"
+          [disabled]="loading"
+        />
+      </div>
+
+      <button class="main-btn" type="button" (click)="askQuestion()" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Ask Document
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Searching document...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+
+      <div class="info-box">
+        <i class="bi bi-info-circle"></i>
+        <div>
+          <strong>Important</strong>
+          <p>This page asks questions about the document already indexed by your FastAPI RAG backend.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="answer-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>AI Answer</h2>
+        </div>
+
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-search-heart"></i>
+        </div>
+
+        <h3>No answer yet</h3>
+
+        <p>
+          Ask a question about the indexed document. The AI answer will appear here.
+        </p>
+      </div>
+
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+      </div>
+
+      <div *ngIf="result && !loading" class="answer-output">
+        <p>{{ getAnswer() }}</p>
+
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-chat-dots"></i>
+            {{ result.analysisType }}
+          </span>
+
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
+
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
+
+        <details class="raw-details">
+          <summary>
+            <i class="bi bi-code-square"></i>
+            View raw result
+          </summary>
+
+          <pre>{{ result.result | json }}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>

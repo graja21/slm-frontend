@@ -1,0 +1,170 @@
+<section class="extraction-page">
+  <div class="extraction-hero">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-braces"></i>
+        Information Extraction
+      </span>
+
+      <h1>Extract entities from text</h1>
+
+      <p>
+        Identify people, companies, locations, dates, numbers and keywords from
+        unstructured text using your local SLM backend.
+      </p>
+    </div>
+
+    <div class="hero-badge">
+      <i class="bi bi-braces-asterisk"></i>
+      <strong>JSON AI</strong>
+      <small>Entity Mode</small>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <div class="editor-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Text to extract</h2>
+        </div>
+
+        <button class="clear-btn" type="button" (click)="clear()" [disabled]="loading">
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="text"
+        placeholder="Paste text here..."
+        [disabled]="loading"
+      ></textarea>
+
+      <div class="editor-footer">
+        <span>
+          <i class="bi bi-fonts"></i>
+          {{ text.length }} characters
+        </span>
+
+        <span>
+          <i class="bi bi-card-text"></i>
+          {{ text.trim() ? text.trim().split(' ').length : 0 }} words
+        </span>
+      </div>
+
+      <button class="main-btn" type="button" (click)="extract()" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Extract Information
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Extracting...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>Extracted Data</h2>
+        </div>
+
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-search"></i>
+        </div>
+
+        <h3>No extraction yet</h3>
+
+        <p>Enter text on the left and run extraction. Structured data will appear here.</p>
+      </div>
+
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+      </div>
+
+      <div *ngIf="result && !loading" class="extraction-output">
+        <div class="entities-grid">
+          <div class="entity-card">
+            <span>People</span>
+            <strong>{{ getArray('people').length }}</strong>
+            <p>{{ getArray('people').join(', ') || 'Not found' }}</p>
+          </div>
+
+          <div class="entity-card">
+            <span>Companies</span>
+            <strong>{{ getArray('companies').length }}</strong>
+            <p>{{ getArray('companies').join(', ') || 'Not found' }}</p>
+          </div>
+
+          <div class="entity-card">
+            <span>Locations</span>
+            <strong>{{ getArray('locations').length }}</strong>
+            <p>{{ getArray('locations').join(', ') || 'Not found' }}</p>
+          </div>
+
+          <div class="entity-card">
+            <span>Dates</span>
+            <strong>{{ getArray('dates').length }}</strong>
+            <p>{{ getArray('dates').join(', ') || 'Not found' }}</p>
+          </div>
+
+          <div class="entity-card">
+            <span>Numbers</span>
+            <strong>{{ getArray('numbers').length }}</strong>
+            <p>{{ getArray('numbers').join(', ') || 'Not found' }}</p>
+          </div>
+
+          <div class="entity-card">
+            <span>Keywords</span>
+            <strong>{{ getArray('keywords').length }}</strong>
+            <p>{{ getArray('keywords').join(', ') || 'Not found' }}</p>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-braces"></i>
+            {{ result.analysisType }}
+          </span>
+
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
+
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
+
+        <details class="raw-details">
+          <summary>
+            <i class="bi bi-code-square"></i>
+            View raw result
+          </summary>
+
+          <pre>{{ getRawResult() }}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>

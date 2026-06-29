@@ -1,0 +1,206 @@
+<section class="financial-text-page">
+  <div class="financial-hero">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-graph-up-arrow"></i>
+        Financial Text Extraction
+      </span>
+
+      <h1>Extract financial indicators from text</h1>
+
+      <p>
+        Paste financial statements, reports or business text and extract structured
+        indicators using your local SLM backend.
+      </p>
+    </div>
+
+    <div class="hero-badge">
+      <i class="bi bi-cash-coin"></i>
+      <strong>Finance AI</strong>
+      <small>Text Mode</small>
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <div class="editor-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Financial text</h2>
+        </div>
+
+        <button
+          class="clear-btn"
+          type="button"
+          (click)="clear()"
+          [disabled]="loading"
+        >
+          <i class="bi bi-x-circle"></i>
+          Clear
+        </button>
+      </div>
+
+      <textarea
+        [(ngModel)]="text"
+        placeholder="Paste financial text here..."
+        [disabled]="loading"
+      ></textarea>
+
+      <div class="model-box">
+        <label>
+          <i class="bi bi-cpu"></i>
+          Model
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="model"
+          placeholder="mistral"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="editor-footer">
+        <span>
+          <i class="bi bi-fonts"></i>
+          {{ text.length }} characters
+        </span>
+
+        <span>
+          <i class="bi bi-card-text"></i>
+          {{ text.trim() ? text.trim().split(' ').length : 0 }} words
+        </span>
+      </div>
+
+      <button
+        class="main-btn"
+        type="button"
+        (click)="analyzeFinancialText()"
+        [disabled]="loading"
+      >
+        <ng-container *ngIf="!loading">
+          <i class="bi bi-stars"></i>
+          Analyze Financial Text
+        </ng-container>
+
+        <ng-container *ngIf="loading">
+          <span class="spinner"></span>
+          Extracting indicators...
+        </ng-container>
+      </button>
+
+      <div *ngIf="errorMessage" class="error-alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div class="result-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Output</span>
+          <h2>Extracted Indicators</h2>
+        </div>
+
+        <span class="status-badge" [class.ready]="result">
+          {{ result ? 'Ready' : 'Waiting' }}
+        </span>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-result">
+        <div class="empty-icon">
+          <i class="bi bi-bar-chart-line"></i>
+        </div>
+
+        <h3>No extraction yet</h3>
+
+        <p>
+          Enter financial text on the left and launch the analysis.
+        </p>
+      </div>
+
+      <div *ngIf="loading" class="loading-result">
+        <div class="line long"></div>
+        <div class="line medium"></div>
+        <div class="line short"></div>
+        <div class="line long"></div>
+      </div>
+
+      <div *ngIf="result && !loading" class="financial-output">
+        <div *ngIf="hasModelJsonError()" class="model-warning">
+          <i class="bi bi-exclamation-triangle"></i>
+
+          <div>
+            <strong>{{ getModelError() }}</strong>
+            <p>
+              The model returned text that was not valid JSON. Raw response is shown below.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="hasModelJsonError()" class="raw-model-response">
+          <h4>Raw model response</h4>
+          <pre>{{ getRawModelResponse() }}</pre>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span>Company</span>
+            <strong>{{ getValue('company_name') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Total Assets</span>
+            <strong>{{ getValue('total_assets') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Net Assets</span>
+            <strong>{{ getValue('net_assets') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Revenue</span>
+            <strong>{{ getValue('revenue') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Net Profit</span>
+            <strong>{{ getValue('net_profit') }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Currency</span>
+            <strong>{{ getValue('currency') }}</strong>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <span>
+            <i class="bi bi-graph-up-arrow"></i>
+            {{ result.analysisType }}
+          </span>
+
+          <span>
+            <i class="bi bi-cpu"></i>
+            {{ result.model }}
+          </span>
+
+          <span>
+            <i class="bi bi-calendar3"></i>
+            {{ result.createdAt | date:'medium' }}
+          </span>
+        </div>
+
+        <details class="raw-details">
+          <summary>
+            <i class="bi bi-code-square"></i>
+            View raw result
+          </summary>
+
+          <pre>{{ getRawResult() }}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
